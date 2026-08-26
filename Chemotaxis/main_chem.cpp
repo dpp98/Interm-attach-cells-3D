@@ -228,6 +228,9 @@ int main(int narg, char** arg)
 						ind1 = 0;
 					
                     ind2 = ind1+1;
+
+					if (ind2 > N-1)
+						ind2 = N-1;
                     
                     s[ind1] += 0.5*c[ind1]/(c[ind1] + km);
                     s[ind2] += 0.5*c[ind2]/(c[ind2] + km);
