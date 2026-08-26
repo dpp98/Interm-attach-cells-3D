@@ -287,7 +287,6 @@ int main(int narg, char** arg)
         }
         
         MPI_Barrier(MPI_COMM_WORLD);
-        between
         MPI_Bcast(bias,Ntotal,MPI_DOUBLE,0,MPI_COMM_WORLD);
         
         MPI_Barrier(MPI_COMM_WORLD);
