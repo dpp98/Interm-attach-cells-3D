@@ -66,7 +66,7 @@ for i in range(npar):
             yp = float(split[3])
             zp = float(split[4])
 
-            if zp <= zmin + 1.0:       # Considering the cells within one cell diameter to be in-contact (Defining the wetting layer)
+            if zp <= zmin + 0.9:       # Defining the wetting layer by cells that are in contact with the substrate, more than just tangential to it
                 carea[i] += one_area
 
     filehandle2.write(str(time[i])+","+str(carea[i]))
