@@ -2,7 +2,7 @@
 """
 Created on Tue Feb 13 20:59:41 2024
 
-@author: M K Panigrahi
+@author: Devi Prasad Panigrahi
 """
 
 import math
