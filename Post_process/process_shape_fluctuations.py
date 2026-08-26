@@ -63,7 +63,7 @@ for i in range(npar):
             yp = float(split[3])
             zp = float(split[4])
             
-            if zp > zmin + 1.0:
+            if zp > zmin + 0.9:    # definition of the wetting layer (see process_contact_area.py)
                 
                 xcluster = np.append(xcluster,xp)
                 ycluster = np.append(ycluster,yp)
