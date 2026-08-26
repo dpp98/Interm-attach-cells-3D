@@ -28,8 +28,8 @@ Npart = 4000
 Ntotal = 11200
 Nbc = 3600
 
-npar = 5000
-nskip = 2000
+npar = 6000
+nskip = 3000
 
 
 for i in range(nskip):
