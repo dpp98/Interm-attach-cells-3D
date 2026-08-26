@@ -33,6 +33,15 @@ nskip = 1000
 
 
 for i in range(nskip):
+    for j in range(9):
+        fhandlehi.readline()
+        fhandlelo.readline()
+
+    for j in range(Nbc):
+        fhandlehi.readline()
+        fhandlelo.readline()
+
+for i in range(nskip):
     
     s = filehandle.readline()
     s = filehandle.readline()
@@ -101,8 +110,8 @@ for i in range(npar):
                 Rtop = np.append(Rtop, math.sqrt(Xp**2 + Yp**2))
                 
             if Zp < -4.0 :
-                Xbot = np.append(Xtop, Xp)
-                Ybot = np.append(Ytop, Yp)
+                Xbot = np.append(Xbot, Xp)
+                Ybot = np.append(Ybot, Yp)
                 Rbot = np.append(Rbot, math.sqrt(Xp**2 + Yp**2))
 
     allPoints=np.column_stack((Xy0,Zy0))
@@ -205,7 +214,7 @@ for i in range(npar):
     B = np.array([0.5*(Suuu + Suvv), 0.5*(Svvv + Svuu)])
     xc = np.linalg.solve(A,B)
         
-    R2[2*i+1] = math.sqrt(xc[0]**2 + xc[1]**2 + (Suu + Svv)/len(x1))
+    R2[2*i+1] = math.sqrt(xc[0]**2 + xc[1]**2 + (Suu + Svv)/len(x2))
     
     R2av[i] = 0.5*(R2[2*i] + R2[2*i+1])
     R1[i] = 0.5*(np.max(Xy0) - np.min(Xy0))
