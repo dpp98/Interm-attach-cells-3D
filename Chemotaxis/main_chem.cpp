@@ -152,10 +152,11 @@ int main(int narg, char** arg)
     
     for (int i = 0; i < N; i++) {
         
-	if (read_cfile == 0)    
-	    c[i] = c0;
+		if (read_cfile == 0)    
+	    	c[i] = c0;
         
-	xgrid[i] = i*dx;
+		xgrid[i] = i*dx;
+		dc[i] = 0.0;
     }
 
     if (read_cfile == 1) {
@@ -215,7 +216,7 @@ int main(int narg, char** arg)
 	
         if (me == 0) {
             
-            ////// Add the source term //////
+            ////// Add the sink term //////
             for (int j = 0; j < N; j++)
                 s[j] = 0.0;
             
@@ -224,13 +225,13 @@ int main(int narg, char** arg)
                 if (type[l] == 1) {
                     
                     ind1 = floor(x[3*l]/dx);
-					if (ind1 < 0)
-						ind1 = 0;
-					
+                    
+                    if (ind1 < 0)
+		  				ind1 = 0;
+		  			if (ind1 > N-2)
+		  				ind1 = N-2;
+                    
                     ind2 = ind1+1;
-
-					if (ind2 > N-1)
-						ind2 = N-1;
                     
                     s[ind1] += 0.5*c[ind1]/(c[ind1] + km);
                     s[ind2] += 0.5*c[ind2]/(c[ind2] + km);
@@ -267,12 +268,18 @@ int main(int narg, char** arg)
                 if (type[l] == 1) {
                  
                     ind1 = floor(x[3*l]/dx);
+                    
+                    if (ind1 < 0)
+		  				ind1 = 0;
+		  			if (ind1 > N-2)
+		  				ind1 = N-2;
+                    
                     ind2 = ind1+1;
 		  
-		    bias[l] = 0.50 + bf*(c[ind2]/(c[ind2] + kd) - c[ind1]/(c[ind1] + kd));
+		    		bias[l] = 0.50 + bf*(c[ind2]/(c[ind2] + kd) - c[ind1]/(c[ind1] + kd));
 
                     if (bias[l] > 0.9) bias[l] = 0.9;
-		    if (bias[l] < 0.1) bias[l] = 0.1;
+		    		if (bias[l] < 0.1) bias[l] = 0.1;
           	    	    
                 }
             }    
@@ -280,7 +287,7 @@ int main(int narg, char** arg)
         }
         
         MPI_Barrier(MPI_COMM_WORLD);
-        
+        between
         MPI_Bcast(bias,Ntotal,MPI_DOUBLE,0,MPI_COMM_WORLD);
         
         MPI_Barrier(MPI_COMM_WORLD);
@@ -288,10 +295,10 @@ int main(int narg, char** arg)
         // transmit bias to lammps
         lammps_scatter_atoms(lmp,(char *) "rmass",1,1,bias);
         
-	MPI_Barrier(MPI_COMM_WORLD);
+		MPI_Barrier(MPI_COMM_WORLD);
 	
-	// run lammps
-        lmp->input->one("run 1");
+		// run lammps
+        lmp->input->one("run 1 pre no post no");
         
         MPI_Barrier(MPI_COMM_WORLD);
             
