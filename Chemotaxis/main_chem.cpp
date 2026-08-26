@@ -177,12 +177,12 @@ int main(int narg, char** arg)
         
         // get coordinates from lammps
         
-	lammps_gather_atoms(lmp,(char *) "x",1,3,x);
-	lammps_gather_atoms(lmp,(char *) "v",1,3,v);
+		lammps_gather_atoms(lmp,(char *) "x",1,3,x);
+		lammps_gather_atoms(lmp,(char *) "v",1,3,v);
         lammps_gather_atoms(lmp,(char *) "type",0,1,type);
-	lammps_gather_atoms(lmp,(char *) "rmass",1,1,bias);
+		lammps_gather_atoms(lmp,(char *) "rmass",1,1,bias);
        
-	MPI_Barrier(MPI_COMM_WORLD);
+		MPI_Barrier(MPI_COMM_WORLD);
 
         ////////// Output /////////
         
@@ -205,14 +205,13 @@ int main(int narg, char** arg)
 		ofile2 << "\n";
             
 		for (int l = 0; l < N; l++)
-                    ofile2 << dc[l] << " ";
+                ofile2 << dc[l] << " ";
                 ofile2 << "\n";
-		
                 }
         }
        
 
-	MPI_Barrier(MPI_COMM_WORLD);
+		MPI_Barrier(MPI_COMM_WORLD);
 	
         if (me == 0) {
             
@@ -225,6 +224,9 @@ int main(int narg, char** arg)
                 if (type[l] == 1) {
                     
                     ind1 = floor(x[3*l]/dx);
+					if (ind1 < 0)
+						ind1 = 0;
+					
                     ind2 = ind1+1;
                     
                     s[ind1] += 0.5*c[ind1]/(c[ind1] + km);
