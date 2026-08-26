@@ -112,7 +112,7 @@ for i in range(npar):
     hull_points = points[hull.vertices]
     xbdary = hull_points[:, 0]
     ybdary = hull_points[:, 1]
-    dist = np.asarray(xbdary)    
+    dist = np.zeros(len(xbdary), dtype=float)  
     
     xcenter = np.mean(np.asarray(xbdary))
     ycenter = np.mean(np.asarray(ybdary))
