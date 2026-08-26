@@ -155,7 +155,7 @@ for i in range(npar):
         
         Suu += x1[j]**2
         Svv += z1[j]**2
-        Suv ++ x1[j]*z1[j]
+        Suv += x1[j]*z1[j]
         
         Suuu += x1[j]**3
         Svvv += z1[j]**3
@@ -194,7 +194,7 @@ for i in range(npar):
         
         Suu += x2[j]**2
         Svv += z2[j]**2
-        Suv ++ x2[j]*z2[j]
+        Suv += x2[j]*z2[j]
         
         Suuu += x2[j]**3
         Svvv += z2[j]**3
@@ -212,7 +212,7 @@ for i in range(npar):
     R3[i] = 0.5*(np.max(Rtop) + np.max(Rbot))
     
     
-    sigma[i] = 0.5*(Fwalllo[i] + Fwallhi[i])/(math.pi*(R3[i]**2)*(1.0/R1[i] + 1.0/R2[i]))
+    sigma[i] = 0.5*(Fwalllo[i] + Fwallhi[i])/(math.pi*(R3[i]**2)*(1.0/R1[i] + 1.0/R2av[i]))
 ######################
 #figure, axes = plt.subplots()
 #Drawing_uncolored_circle = plt.Circle(( xc[0]+x2mean , xc[1]+z2mean ), R2av[i], fill = False, linestyle='--' )
