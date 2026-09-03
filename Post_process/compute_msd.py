@@ -16,9 +16,8 @@ filehandle = open(filename,'r')
 fileout = open("Dt.xyz",'w')
 
 Ncells = 1327
-npar = 7700
+npar = 8001
 
-time = np.zeros(npar-1,dtype=float)
 xp = np.zeros((npar,Ncells),dtype=float)
 yp = np.zeros((npar,Ncells),dtype=float)
 zp = np.zeros((npar,Ncells),dtype=float)
@@ -27,7 +26,6 @@ xpuw = np.zeros((npar,Ncells),dtype=float)
 ypuw = np.zeros((npar,Ncells),dtype=float)
 zpuw = np.zeros((npar,Ncells),dtype=float)
 
-dt = 0.001
 Lx = 11.0
 
 for i in range(npar):
@@ -83,8 +81,7 @@ msd = np.zeros(npar-1,dtype=float)
 for i in range(1,npar):
     for j in range(Ncells):
         
-        time[i-1] = i*dt
-        msd[i-1] += math.sqrt((xpuw[i][j] - xpuw[0][j])**2 + (ypuw[i][j] - ypuw[0][j])**2 + (zpuw[i][j] - zpuw[0][j])**2)
+        msd[i-1] += (xpuw[i][j] - xpuw[0][j])**2 + (ypuw[i][j] - ypuw[0][j])**2 + (zpuw[i][j] - zpuw[0][j])**2
         
     msd[i-1] /= Ncells
     
@@ -92,12 +89,6 @@ for i in range(1,npar):
     fileout.write("\n")
     
 
-
-#plt.plot(time,Dt)
-#plt.xlim([3.0,5.5])
-#plt.ylim([50.0,70.0])
-#plt.show()    
-    
 filehandle.close()
 fileout.close()
     
