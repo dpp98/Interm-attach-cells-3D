@@ -2,7 +2,7 @@
 """
 Created on Tue Feb 13 20:59:41 2024
 
-@author: M K Panigrahi
+@author: Devi Prasad Panigrahi
 """
 
 import math
@@ -10,15 +10,15 @@ import numpy as np
 #import matplotlib.pyplot as plt
 from scipy.spatial import ConvexHull
 
-foldername = "tmpstan36"
+foldername = "st_re25"
 
 filename = foldername+"/particles.xyz"
 filehandle = open(filename,'r')
 
-fwallhi = "fwalln36hi.dump"
+fwallhi = "fwall_hi_re25.dump"
 fhandlehi = open(fwallhi,'r')
 
-fwalllo = "fwalln36lo.dump"
+fwalllo = "fwall_lo_re25.dump"
 fhandlelo = open(fwalllo,'r')
 
 fname = foldername+"/streg.txt"
@@ -28,9 +28,18 @@ Npart = 4000
 Ntotal = 11200
 Nbc = 3600
 
-npar = 6500
-nskip = 1000
+npar = 5000
+nskip = 3000
 
+
+for i in range(nskip):
+    for j in range(9):
+        fhandlehi.readline()
+        fhandlelo.readline()
+
+    for j in range(Nbc):
+        fhandlehi.readline()
+        fhandlelo.readline()
 
 for i in range(nskip):
     
@@ -84,7 +93,7 @@ for i in range(npar):
         split = s.split(" ")
         idx = int(split[1])
         
-        if idx < Npart:
+        if idx <= Npart:
             
             Xp = float(split[2])
             Yp = float(split[3])
@@ -101,8 +110,8 @@ for i in range(npar):
                 Rtop = np.append(Rtop, math.sqrt(Xp**2 + Yp**2))
                 
             if Zp < -4.0 :
-                Xbot = np.append(Xtop, Xp)
-                Ybot = np.append(Ytop, Yp)
+                Xbot = np.append(Xbot, Xp)
+                Ybot = np.append(Ybot, Yp)
                 Rbot = np.append(Rbot, math.sqrt(Xp**2 + Yp**2))
 
     allPoints=np.column_stack((Xy0,Zy0))
@@ -155,7 +164,7 @@ for i in range(npar):
         
         Suu += x1[j]**2
         Svv += z1[j]**2
-        Suv ++ x1[j]*z1[j]
+        Suv += x1[j]*z1[j]
         
         Suuu += x1[j]**3
         Svvv += z1[j]**3
@@ -194,7 +203,7 @@ for i in range(npar):
         
         Suu += x2[j]**2
         Svv += z2[j]**2
-        Suv ++ x2[j]*z2[j]
+        Suv += x2[j]*z2[j]
         
         Suuu += x2[j]**3
         Svvv += z2[j]**3
@@ -205,14 +214,14 @@ for i in range(npar):
     B = np.array([0.5*(Suuu + Suvv), 0.5*(Svvv + Svuu)])
     xc = np.linalg.solve(A,B)
         
-    R2[2*i+1] = math.sqrt(xc[0]**2 + xc[1]**2 + (Suu + Svv)/len(x1))
+    R2[2*i+1] = math.sqrt(xc[0]**2 + xc[1]**2 + (Suu + Svv)/len(x2))
     
     R2av[i] = 0.5*(R2[2*i] + R2[2*i+1])
     R1[i] = 0.5*(np.max(Xy0) - np.min(Xy0))
     R3[i] = 0.5*(np.max(Rtop) + np.max(Rbot))
     
     
-    sigma[i] = 0.5*(Fwalllo[i] + Fwallhi[i])/(math.pi*(R3[i]**2)*(1.0/R1[i] + 1.0/R2[i]))
+    sigma[i] = 0.5*(Fwalllo[i] + Fwallhi[i])/(math.pi*(R3[i]**2)*(1.0/R1[i] + 1.0/R2av[i]))
 ######################
 #figure, axes = plt.subplots()
 #Drawing_uncolored_circle = plt.Circle(( xc[0]+x2mean , xc[1]+z2mean ), R2av[i], fill = False, linestyle='--' )
@@ -231,4 +240,3 @@ freghadl.close()
 filehandle.close()
 fhandlehi.close()
 fhandlelo.close()
-## mean sigma = 3.0203831773994088   std sigma = 0.5108837885582562
