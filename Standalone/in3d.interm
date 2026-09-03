@@ -8,30 +8,29 @@ variable        seed equal 1974019
 
 units           lj
 atom_style      hybrid charge sphere
-#atom_modify id yes
 atom_modify	map yes
-boundary p p p
+boundary p p f
 newton on
 
-############################
+##########################
 
-read_data inposwett_dilp9.init 
+read_data inposwett_dilp9.init
 
 group gp type 2
 group cells type 1
 
 # No flux boundaries
-#fix walls all wall/reflect zlo EDGE zhi EDGE
+fix walls all wall/reflect zlo EDGE zhi EDGE
 
-neighbor        2.0 bin
+neighbor        3.0 bin
 neigh_modify every 1 delay 0 check yes
-#neigh_modify exclude type 2 2
+neigh_modify exclude type 2 2
 
 ##############################
 
 pair_style hybrid/overlay active/dicty3d 2.5 lj/cut 2.5 
-pair_coeff * * active/dicty3d 10.0 1.0 3.0 0.1 0.1 0.0001 0.5 2.0 0.5
-# 			      Fa,  r1, r2, T1, phi, dt,   Ps, wf, Pc
+pair_coeff * * active/dicty3d 10.0 1.0 3.0 0.1 0.1 0.0001 0.5 1.0 0.50
+# 		Ka, r1, r2, Ta, phi, dt, Ps, wf, Pc
 pair_coeff * * lj/cut 1.0 0.8909 1.0
 
 # overdamped brownian dynamics time-step
@@ -47,7 +46,7 @@ thermo_style    custom step fmax
 
 # q is the number of attachment steps, radius is the neighbor id 
 
-dump         1 all custom 10000 wett_phip9_wf2.dump type id x y z q radius mass vx vy vz
+dump         1 all custom 10000 test.dump type id x y z q radius mass vx vy vz
 
 #thermo_modify lost warn
 timestep        0.0001
