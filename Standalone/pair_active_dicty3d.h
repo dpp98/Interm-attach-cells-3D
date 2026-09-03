@@ -47,7 +47,7 @@ class PairActiveDicty3d : public Pair {
     
   protected:  
     
-    double timestep, ps, wf, pc;
+    double timestep, ps, wf, pc1, pc2;
     double **ta, **var_ta;
     double **cut_far, **cut_near;
     double **f0;
