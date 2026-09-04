@@ -1,0 +1,63 @@
+
+variable        gamma_t string 10.0
+variable        gamma_r string 0.07
+variable        temp string 0.1
+variable        seed equal 1974019
+
+###########################
+
+units           lj
+atom_style      hybrid dipole sphere
+#atom_modify id yes
+atom_modify	map yes
+boundary p p p
+newton on
+
+############################
+
+read_data inposwett_phip3_abp_fop.init 
+
+group gp type 2
+group cells type 1
+
+# No flux boundaries
+#fix walls all wall/reflect zlo EDGE zhi EDGE
+
+neighbor        2.0 bin
+neigh_modify every 1 delay 0 check yes
+#neigh_modify exclude type 2 2
+
+##############################
+
+#pair_style hybrid/overlay active/dicty3d 2.5 lj/cut 2.5 
+#pair_coeff * * active/dicty3d 10.0 1.0 3.0 0.01 0.1 0.0001 0.5 1.0 0.5 0.5 1.0 0.00 0.1 0.5
+# 			      Fa,  r1, r2, T1, phi, dt,   Ps, wf, Pc, Pc, fric_range, friction_coeff, friction_max, friction_factor
+pair_style lj/cut 2.5
+pair_coeff 1 2 1.0 0.8909 3.0
+pair_coeff 1 1 10.0 0.8909 3.0
+pair_coeff 2 2 0.1 0.8909 1.0
+
+# overdamped brownian dynamics time-step
+
+#fix 1 all brownian ${temp} ${seed} gamma_t ${gamma_t} rng none
+fix 3 gp move linear 0.0 0.0 0.0
+fix 1 cells brownian/sphere ${temp} ${seed} gamma_t ${gamma_t} gamma_r ${gamma_r} rng gaussian
+fix 2 cells propel/self dipole 10.0 
+
+#fix 4 cells recenter INIT NULL NULL
+
+###############
+
+thermo_style    custom step fmax
+
+# q is the number of attachment steps, radius is the neighbor id 
+
+dump         1 all custom 10000 dewett_abp7.dump type id x y z q radius mass vx vy vz
+
+#thermo_modify lost warn
+timestep        0.0001
+thermo          10000
+
+###############
+#run 10000
+run 1000000000
