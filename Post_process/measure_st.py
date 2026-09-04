@@ -10,15 +10,15 @@ import numpy as np
 #import matplotlib.pyplot as plt
 from scipy.spatial import ConvexHull
 
-foldername = "tmpstan36"
+foldername = "st_re25"
 
 filename = foldername+"/particles.xyz"
 filehandle = open(filename,'r')
 
-fwallhi = "fwalln36hi.dump"
+fwallhi = "fwall_hi_re25.dump"
 fhandlehi = open(fwallhi,'r')
 
-fwalllo = "fwalln36lo.dump"
+fwalllo = "fwall_lo_re25.dump"
 fhandlelo = open(fwalllo,'r')
 
 fname = foldername+"/streg.txt"
@@ -28,7 +28,7 @@ Npart = 4000
 Ntotal = 11200
 Nbc = 3600
 
-npar = 6000
+npar = 5000
 nskip = 3000
 
 
@@ -93,7 +93,7 @@ for i in range(npar):
         split = s.split(" ")
         idx = int(split[1])
         
-        if idx < Npart:
+        if idx <= Npart:
             
             Xp = float(split[2])
             Yp = float(split[3])
@@ -240,4 +240,3 @@ freghadl.close()
 filehandle.close()
 fhandlehi.close()
 fhandlelo.close()
-## mean sigma = 3.0203831773994088   std sigma = 0.5108837885582562
