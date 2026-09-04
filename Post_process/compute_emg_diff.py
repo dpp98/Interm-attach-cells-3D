@@ -13,7 +13,7 @@ import numpy as np
 filename = "Dt.xyz"
 filehandle = open(filename,'r')
 
-nlines = 7000
+nlines = 8000
 oosix = 1.0/6.0
 
 time = np.zeros(nlines,dtype=float)
