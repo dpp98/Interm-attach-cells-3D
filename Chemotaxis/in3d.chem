@@ -8,7 +8,6 @@ variable        seed equal 1974019
 
 units           lj
 atom_style      hybrid charge sphere
-#atom_modify id yes
 atom_modify	map yes
 boundary p p f
 newton on
@@ -23,7 +22,7 @@ group cells type 1
 # No flux boundaries
 fix walls all wall/reflect zlo EDGE zhi EDGE
 
-neighbor        2.0 bin
+neighbor        3.0 bin
 neigh_modify every 1 delay 0 check yes
 neigh_modify exclude type 2 2
 
