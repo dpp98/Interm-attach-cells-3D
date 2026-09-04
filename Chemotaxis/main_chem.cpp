@@ -22,6 +22,7 @@ using namespace std;
 
 #define PI 3.14159265358979323846
 
+// always run with nprocs_lammps == nprocs, you will get an error otherwise
 
 double Lx, timestep, tfinal, Dc, alpha, c0, bf, kd, km;
 long long int Nsteps;
@@ -74,8 +75,6 @@ int main(int narg, char** arg)
         }
     }
     
-    
-  
     LAMMPS *lmp = NULL;
     if (lammps == 1) lmp = new LAMMPS(0,NULL,comm_lammps);
 
@@ -117,9 +116,6 @@ int main(int narg, char** arg)
     Ntotal = lammps_get_natoms(lmp);
     Nsteps = (long long int)(tfinal / timestep);
   
-    std::cout << "Ntotal = " << Ntotal << std::endl;
-    std::cout << "Timestep = " << 10000*timestep << std::endl;
-
     string incfile = cfile_name;
     ifstream cfile(incfile);
 
@@ -287,6 +283,7 @@ int main(int narg, char** arg)
         }
         
         MPI_Barrier(MPI_COMM_WORLD);
+
         MPI_Bcast(bias,Ntotal,MPI_DOUBLE,0,MPI_COMM_WORLD);
         
         MPI_Barrier(MPI_COMM_WORLD);
