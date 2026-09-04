@@ -120,7 +120,7 @@ void PairActiveDicty3d::compute(int eflag, int vflag)
         vytmp = v[i][1];
         vztmp = v[i][2];
 
-	pc = bias[i];	
+		pc = bias[i];	
 
         itype = type[i];
         jlist = firstneigh[i];
@@ -143,16 +143,18 @@ void PairActiveDicty3d::compute(int eflag, int vflag)
                 
             nxtmp = x[lnid][0];
             nytmp = x[lnid][1];
-       
+       		nztmp = x[lnid][2];
+            jtype = type[lnid];
+            
             // correct for periodicity
             if (nxtmp-xtmp > 0.5*(domain->boxhi[0]-domain->boxlo[0])) nxtmp = nxtmp - (domain->boxhi[0] - domain->boxlo[0]);
             if (nxtmp-xtmp < 0.5*(domain->boxlo[0]-domain->boxhi[0])) nxtmp = nxtmp +  (domain->boxhi[0] - domain->boxlo[0]);
             if (nytmp-ytmp > 0.5*(domain->boxhi[1]-domain->boxlo[1])) nytmp = nytmp - (domain->boxhi[1] - domain->boxlo[1]);
             if (nytmp-ytmp < 0.5*(domain->boxlo[1]-domain->boxhi[1])) nytmp = nytmp +  (domain->boxhi[1] - domain->boxlo[1]);
-
+			if (nztmp-ztmp > 0.5*(domain->boxhi[2]-domain->boxlo[2])) nztmp = nztmp - (domain->boxhi[2] - domain->boxlo[2]);
+            if (nztmp-ztmp < 0.5*(domain->boxlo[2]-domain->boxhi[2])) nztmp = nztmp +  (domain->boxhi[2] - domain->boxlo[2]);
                       
-            nztmp = x[lnid][2];
-            jtype = type[lnid];
+            
         
             delx = nxtmp - xtmp;
             dely = nytmp - ytmp;
@@ -181,6 +183,16 @@ void PairActiveDicty3d::compute(int eflag, int vflag)
                 nytmp = x[j][1];
                 nztmp = x[j][2];
                 jtype = type[j];
+        
+        		// correct for periodicity
+                // if a bc is not meant to be periodic, put large bounds where you know a cell cannot go
+                if (nxtmp-xtmp > 0.5*(domain->boxhi[0]-domain->boxlo[0])) nxtmp = nxtmp - (domain->boxhi[0] - domain->boxlo[0]);
+                if (nxtmp-xtmp < 0.5*(domain->boxlo[0]-domain->boxhi[0])) nxtmp = nxtmp +  (domain->boxhi[0] - domain->boxlo[0]);
+                if (nytmp-ytmp > 0.5*(domain->boxhi[1]-domain->boxlo[1])) nytmp = nytmp - (domain->boxhi[1] - domain->boxlo[1]);
+                if (nytmp-ytmp < 0.5*(domain->boxlo[1]-domain->boxhi[1])) nytmp = nytmp +  (domain->boxhi[1] - domain->boxlo[1]);
+                if (nztmp-ztmp > 0.5*(domain->boxhi[2]-domain->boxlo[2])) nztmp = nztmp - (domain->boxhi[2] - domain->boxlo[2]);
+                if (nztmp-ztmp < 0.5*(domain->boxlo[2]-domain->boxhi[2])) nztmp = nztmp +  (domain->boxhi[2] - domain->boxlo[2]);
+        
         
                 delx = nxtmp - xtmp;
                 dely = nytmp - ytmp;
@@ -212,15 +224,20 @@ void PairActiveDicty3d::compute(int eflag, int vflag)
                
                nxtmp = x[lnid][0];
                nytmp = x[lnid][1];
+               nztmp = x[lnid][2];
+               jtype = type[lnid];
                
-	       // correct for periodicity
-	       if (nxtmp-xtmp > 0.5*(domain->boxhi[0]-domain->boxlo[0])) nxtmp = nxtmp - (domain->boxhi[0] - domain->boxlo[0]);
+	       		// correct for periodicity
+               // if a bc is not meant to be periodic, put large bounds where you know a cell cannot go
+               if (nxtmp-xtmp > 0.5*(domain->boxhi[0]-domain->boxlo[0])) nxtmp = nxtmp - (domain->boxhi[0] - domain->boxlo[0]);
                if (nxtmp-xtmp < 0.5*(domain->boxlo[0]-domain->boxhi[0])) nxtmp = nxtmp +  (domain->boxhi[0] - domain->boxlo[0]);
                if (nytmp-ytmp > 0.5*(domain->boxhi[1]-domain->boxlo[1])) nytmp = nytmp - (domain->boxhi[1] - domain->boxlo[1]);
                if (nytmp-ytmp < 0.5*(domain->boxlo[1]-domain->boxhi[1])) nytmp = nytmp +  (domain->boxhi[1] - domain->boxlo[1]);
+               if (nztmp-ztmp > 0.5*(domain->boxhi[2]-domain->boxlo[2])) nztmp = nztmp - (domain->boxhi[2] - domain->boxlo[2]);
+               if (nztmp-ztmp < 0.5*(domain->boxlo[2]-domain->boxhi[2])) nztmp = nztmp +  (domain->boxhi[2] - domain->boxlo[2]);
 
                delx = nxtmp - xtmp;
-               jtype = type[lnid];
+               
  
             	if (delx >= 0.0 && jtype==2)
             	    pdf[k] = pc;
@@ -282,10 +299,13 @@ void PairActiveDicty3d::compute(int eflag, int vflag)
             jtype = type[lnid];
             
             // correct for periodicity
-	    if (nxtmp-xtmp > 0.5*(domain->boxhi[0]-domain->boxlo[0])) nxtmp = nxtmp - (domain->boxhi[0] - domain->boxlo[0]);
+            // if a bc is not meant to be periodic, put large bounds where you know a cell cannot go
+            if (nxtmp-xtmp > 0.5*(domain->boxhi[0]-domain->boxlo[0])) nxtmp = nxtmp - (domain->boxhi[0] - domain->boxlo[0]);
             if (nxtmp-xtmp < 0.5*(domain->boxlo[0]-domain->boxhi[0])) nxtmp = nxtmp +  (domain->boxhi[0] - domain->boxlo[0]);
             if (nytmp-ytmp > 0.5*(domain->boxhi[1]-domain->boxlo[1])) nytmp = nytmp - (domain->boxhi[1] - domain->boxlo[1]);
             if (nytmp-ytmp < 0.5*(domain->boxlo[1]-domain->boxhi[1])) nytmp = nytmp +  (domain->boxhi[1] - domain->boxlo[1]);
+            if (nztmp-ztmp > 0.5*(domain->boxhi[2]-domain->boxlo[2])) nztmp = nztmp - (domain->boxhi[2] - domain->boxlo[2]);
+            if (nztmp-ztmp < 0.5*(domain->boxlo[2]-domain->boxhi[2])) nztmp = nztmp +  (domain->boxhi[2] - domain->boxlo[2]);
 
             delx = nxtmp - xtmp;
             dely = nytmp - ytmp;
@@ -296,7 +316,7 @@ void PairActiveDicty3d::compute(int eflag, int vflag)
             if (ndist < cut_near[itype][jtype])
                 fmag = 0.0;
             else
-            fmag = f0[itype][jtype] * (ndist - cut_near[itype][jtype]);
+            	fmag = f0[itype][jtype] * (ndist - cut_near[itype][jtype]);
 
             if (jtype == 2) fmag *= wf;
             
@@ -343,6 +363,7 @@ void PairActiveDicty3d::allocate()
 
 /* ----------------------------------------------------------------------
    global settings
+   Superflous, please use pair coeff
 ------------------------------------------------------------------------- */
 
 void PairActiveDicty3d::settings(int narg, char **arg)
@@ -383,7 +404,7 @@ void PairActiveDicty3d::coeff(int narg, char **arg)
   timestep = utils::numeric(FLERR, arg[7], false, lmp);
   ps = utils::numeric(FLERR, arg[8], false, lmp);
   wf = utils::numeric(FLERR, arg[9], false, lmp);
-  pc =  utils::numeric(FLERR, arg[10], false, lmp);
+  pc1 =  utils::numeric(FLERR, arg[10], false, lmp);
 
   int count = 0;
   for (int i = ilo; i <= ihi; i++) {
@@ -575,4 +596,3 @@ void *PairActiveDicty3d::extract(const char *str, int &dim)
   if (strcmp(str, "f0") == 0) return (void *) f0;
   return nullptr;
 }
-
